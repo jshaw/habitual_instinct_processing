@@ -8,6 +8,7 @@ class ParticleSystem{
   int cols;
   int rows;
   boolean particleFade = false;
+  boolean psType;
   
   ParticleSystem(PVector location, int msi, int sim){
     origin = location.get();
@@ -40,8 +41,22 @@ class ParticleSystem{
     //if(int(angle_tmp) > 90){
     //  answr = answr * -1;
     //}
-    float zpos = (origin.z - ((maxSystemIndex * systemIndexMultiplier) / 2)) * -1;
+    
+    //println("origin.z: " + origin.z);
+    //println("maxSystemIndex: " + maxSystemIndex);
+    float zpos = (origin.z - (((maxSystemIndex) * systemIndexMultiplier))) * -1;
+    
+    //println("---");
+    //println(origin.x);
+    //println(origin.y);
+    //println(origin.z);
+    
+    
+    //println(zpos);
+    //println("=====");
+    
     particles.add(new Particle(new PVector(answr_length, answr, zpos)));
+    //particles.add(new Particle(new PVector(answr_length, answr, origin.z)));
   }
   
   void setArrayVars(int columns, int rws){
@@ -96,31 +111,13 @@ class ParticleSystem{
   void run(){
     int i = 0;
     int psize = particles.size()-1;
-    // also testing pshapes vs. spheres for partlices
-    // =========
-    //star = createShape();
-    //star.beginShape();
-    //star.fill(102);
-    //star.stroke(255);
-    //star.strokeWeight(2);
-    
-      for(i = psize; i>=0; i--){
-        Particle p = particles.get(i);
-        p.run();
-        if(p.isDead()){
-          particles.remove(i);
-        }
-        
-        //PVector location = p.getLocation();
-        //println(location);
-        //if(p.isDead()){
-        //  particles.remove(i);
-        //} else {
-        //  star.vertex(location.x, location.y, location.z);
-        //}
-        
+    for(i = psize; i>=0; i--){
+      Particle p = particles.get(i);
+      p.run();
+      if(p.isDead()){
+        particles.remove(i);
       }
-    //star.endShape(CLOSE);
+    }
   }
 
   void update_particle(int col, int row, int index, int x, int y){
@@ -171,22 +168,51 @@ class ParticleSystem{
   // if particle fade is implemented, it will need to have a way to reset the particle whenever it 
   // has a transparency that is very low
   void setParticleFade(boolean pf){
+    //println("asdfasdfasdfasdf " + str(particleFade));
     particleFade = pf;
   }
    
   void updateParticleFade(int columnIndex){
     if(particleFade == true){
-      int x;
-      //println("columnIndex" + columnIndex);
-      //println("array_points" + array_points.length);
-      //int tmp_length = array_points[columnIndex].length;
-      //println(tmp_length);
-      for(x = 0; x < rows; x++){
-        Particle p = array_points[columnIndex-1][x];
-        //println("index:" + p);
-        p.updateParticleAlpha();
+      
+      if(psType == true){
+        int i = 0;
+        int psize = particles.size()-1;
+        for(i = psize; i>=0; i--){
+          Particle p = particles.get(i);
+          p.setParticleFade(particleFade);
+        }
+      } else {
+        int x;
+        //println("columnIndex" + columnIndex);
+        //println("array_points" + array_points.length);
+        //int tmp_length = array_points[columnIndex].length;
+        //println(tmp_length);
+        for(x = 0; x < rows; x++){
+          Particle p = array_points[columnIndex-1][x];
+          //println("index:" + p);
+          p.updateParticleAlpha();
+        }
+      }
+    } else {
+      if(psType == true){
+        int i = 0;
+        int psize = particles.size()-1;
+        for(i = psize; i>=0; i--){
+          Particle p = particles.get(i);
+          p.setParticleFade(particleFade);
+        }
       }
     }
+  }
+  
+  void setParticleSystemType(boolean type){
+    if(type == true){
+        psType = true;
+    } else {
+      psType = false;
+    }
+
   }
   
 }

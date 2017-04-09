@@ -7,8 +7,12 @@ class Particle {
   boolean particleFade;
   
   Particle(PVector l){
-    //acceleration = new PVector(0,0.05);
-    //velocity = new PVector(random(-1, 1), random(-2, 0));
+    acceleration = new PVector(0,0.05);
+    // I added this... below... not sure about it tho.
+    // test tomorrow
+    //velocity = new PVector(random(-1, 1), random(-1, 1), random(-1, 1));
+    
+    velocity = new PVector(random(-1, 1), random(-1, 1));
     location = l.get();
     lifespan = 250.0;
     transparent = true;
@@ -25,14 +29,24 @@ class Particle {
   }
   
   void update(){
-    //velocity.add(acceleration);
-    //location.add(velocity);
-    //lifespan -= 1.0;
-    //lifespan -= 0.05;
-    lifespan -= 0.04;
+
+      
+    // TODO: this should be if PF is true and history is false
+    if(particleFade == false){
+      //velocity.add(acceleration);
+      //location.add(velocity);
+    }
+    
+    if(particleFade == true){
+      lifespan -= 1.0;
+    }
+    
   }
   
   void display(){
+    //println("********** transparent " + transparent);
+    //println("********** particleFade " + particleFade);
+    
     if(transparent == false){
       strokeWeight(2);
       if(particleFade == true){
@@ -44,15 +58,15 @@ class Particle {
       }
       
     } else {
-      noStroke();
-      noFill();
+      if(particleFade == true){
+        fill(255, lifespan);
+        stroke(200, lifespan);
+      } else {
+        fill(255, 255, 255);
+        stroke(200, 200, 200);
+      }
+      
     }
-    // playing with pshapes instead of spheres
-    //beginShape(POINTS);
-      //stroke(255,255,255);
-      //vertex(location.x, location.y, location.z);
-    //  sphere(1);
-    //endShape();
     
     pushMatrix();
     //if(transparent == false){
@@ -67,7 +81,8 @@ class Particle {
       // println("location: ");
       // println(location);
       translate(location.x, location.y, location.z);
-      sphere(1);
+      sphere(4);
+      //sphere(map(location.y, 1, 450, 5, 1));
     popMatrix();
   }
 

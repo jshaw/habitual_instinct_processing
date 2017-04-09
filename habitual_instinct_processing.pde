@@ -6,7 +6,7 @@ import peasy.*;
 
 //boolean audio = false;
 
-boolean load_history = true;
+boolean load_history = false;
 
 // ## TODO
 // IF NO DATA COMES IN AFTER 15 SECONDS
@@ -42,7 +42,7 @@ boolean autoCameraZoom = true;
 
 float a = 0.0;
 long lastCamUpdate = 0;
-long updateCamInterval = 25;
+long updateCamInterval = 10;
 
 //int get_history_num = 100;
 int get_history_num = 60;
@@ -53,8 +53,7 @@ float camRotateSpeed = 0.5;
 Pubnub pubnub;
 
 long lastUpdate = 0;
-long updateInterval = 60000;
-//long updateInterval = 10000;
+long updateInterval = 2000;
 
 // For saving files
 int d = day();    // Values from 1 - 31
@@ -62,6 +61,7 @@ int m = month();  // Values from 1 - 12
 int y = year();   // 2003, 2004, 2005, etc.
 
 boolean particleFade = true;
+boolean applyVelocity = true;
 
 import controlP5.*;
 ControlFrame cf;
@@ -76,7 +76,7 @@ String test_sweep_points = "";
 String test_single_point = "";
 
 
-long interval = 10000;
+long interval = 5000;
 long previousMillis = 0;
 long currentMillis = 0;
 
@@ -106,12 +106,12 @@ void setup()
   //surface.setLocation(420, 10);
   //========
 
-  frameRate(10);
+  frameRate(15);
   lights();
   sphereDetail(4);
 
   cam = new PeasyCam(this, 1000);
-  cam.setMinimumDistance(100);
+  cam.setMinimumDistance(500);
   cam.setMaximumDistance(2000);
 
   axisLabelFont = createFont( "Arial", 14 );
@@ -129,9 +129,6 @@ void setup()
     ps = new ParticleSystem(new PVector(width/2, get_history_num), maxSystemIndex, systemIndexMultiplier);
     ps.setParticleSystemType(true);
   } else {
-    // cols = maxSystemIndex;
-    // rows = array_size;
-
     cols = maxSystemIndex;
     rows = array_size;
 
@@ -167,7 +164,6 @@ void setup()
         //printString(message.toString());
         
         // time when new messages come in
-        //currentMillis = millis();
         previousMillis = millis();
         
         parseString(message.toString());
@@ -232,11 +228,11 @@ void printString(String data) {
 }
 
 void setSystemIndex() {
-  //if (systemIndex < maxSystemIndex) {
-  //  systemIndex++;
-  //} else {
-  //  systemIndex = 1;
-  //}
+  if (systemIndex < maxSystemIndex) {
+    systemIndex++;
+  } else {
+    systemIndex = 1;
+  }
   //println("systemIndex: " + systemIndex);
 }
 
@@ -256,23 +252,20 @@ void parseString(String str)
   String[] list;
   int panel_id;
   if (str.indexOf("_") > 0) {
-    //println(str);
     String[] panel_split = split(str, '_');
 
-    print("||");
-    print(panel_split[0]);
-    println("||");
-    
-    //String[] panel_split2 = split(panel_split[0], '"'); 
+    //print("||");
+    //print(panel_split[0]);
+    //println("||");
 
     String tmp_panel_id = panel_split[0].replace("\"", "");
     panel_id = Integer.parseInt(tmp_panel_id);
 
     list = split(panel_split[1], '/');
 
-    println("panel id: " + panel_id);
+    //println("panel id: " + panel_id);
     //println("data: " + panel_split[1]);
-    println("^^^^^^^^^^^^^^^^^^");
+    //println("^^^^^^^^^^^^^^^^^^");
   } else {
     // check for weird text accidently saved via node
     str.replaceAll("\"", "");
@@ -293,12 +286,10 @@ void parseString(String str)
   // only increment after we know the data is good 
   //setSystemIndex();
   ps.setParticleFade(particleFade);
+  ps.setParticleVelocity(applyVelocity);
 
   int i;
   int lst_lngth = list.length;
-
-  int r_1 = 0;
-  int r_2 = 0;
 
   for (i = 0; i < lst_lngth - 1; i++) {
     String[] reading = split(list[i], ':');
@@ -323,30 +314,31 @@ void parseString(String str)
       int z_tmp = (int)row.getFloat("z");
 
       //println(">>>>>>>>>>>>>>>>>>>>>");
-      //int panel_pos = x_tmp * systemIndexMultiplier + ((panel_id) * (48 * systemIndexMultiplier));
       int panel_pos = x_tmp * systemIndexMultiplier + ((panel_id) * (48 * systemIndexMultiplier));
-      int tmp = panel_pos;
-      ps.origin.set(0, 0, tmp);
+      ps.origin.set(0, 0, panel_pos);
       
       //println(x_tmp);
       //println(panel_id);
       //println(panel_pos);
       //println(panel_pos * systemIndexMultiplier);
-      
       //println("<<<<<<<<<<<<<<<<<<<<<");
       
-      
-      int tmp_pos = panel_pos * systemIndexMultiplier;
-
-      //ps.origin.set(0, 0, row.getInt('x') * systemIndexMultiplier);
+      int point_position = panel_pos * systemIndexMultiplier;
 
       if (arraylist_or_array == true) {
-        //ps.addParticle(int(reading[0]), int(reading[1]), int(reading[2]));
-        //ps.addParticle((int)panel_pos, int(reading[1]), int(reading[2]));
-        ps.addParticle(tmp_pos, int(reading[1]), int(reading[2]));
+        int angle = int(reading[1]);
+        int distance = int(reading[2]);
+        //println(angle);
+        //println(distance);
+        //println("\\\\\\\\\\\\\\\\");
+        ps.addParticle(point_position, angle, distance);
+        
+        if (particleFade == true) {
+          ps.updateParticleFade(systemIndex);
+        }
+        
       } else {
         //ps.update_particle((int)systemIndex, (int)i, int(reading[0]), int(reading[1]), int(reading[2]));
-
         ps.update_particle((int)panel_pos, (int)i, int(reading[0]), int(reading[1]), int(reading[2]));
 
         if (particleFade == true) {
@@ -356,6 +348,8 @@ void parseString(String str)
     }
   } 
 }
+
+boolean last_velocity_value;
 
 void draw()
 {
@@ -372,17 +366,33 @@ void draw()
       if (particleFade == true){
         println("kill particle fade!");
         particleFade = false;
+        if(applyVelocity == true){
+          applyVelocity = false; 
+        }
+        turnOnPSFadeWhenReceiveNewData();
     }
   } else {
     if(particleFade == false){
       particleFade = true;
+      //if(applyVelocity == false){
+      //  applyVelocity = true;
+      //}
+      turnOnPSFadeWhenReceiveNewData();
     }
+    
+    //if(applyVelocity != last_velocity_value){
+      //println("HERE IS SOME LOGIC CHECKS TO ONLY RUN ONCE");
+      //last_velocity_value = applyVelocity;
+      ps.setParticleVelocity(applyVelocity);
+      ps.updateParticleVelocity(0);
+    //}
   }
  
   cam.rotateY(radians(camRotateSpeed));
 
   if (autoCameraZoom) {
-    if ((millis() - lastCamUpdate) > updateCamInterval) {
+    //if ((millis() - lastCamUpdate) > updateCamInterval) {
+    if ((currentMillis - lastCamUpdate) > updateCamInterval) {
       lastCamUpdate = millis();
       a += 0.005;
       double d2 = 100 + (sin(a + PI/2) * 1500/2) + 1500/2;
@@ -410,9 +420,7 @@ void draw()
       // panel id: angle: distance
       test_single_point += str(round(random(0, 19)));
       test_single_point += ":";
-      //test_single_point += str(round(map(i, 0, 30, 0, 180)));
       test_single_point += str(round(map(i, 0, max_loop, 0, 90)));
-      //test_single_point += str(92);
       test_single_point += ":";
       test_single_point += str(round(random(5, 400)));
       
@@ -423,7 +431,6 @@ void draw()
     }
     
     println(test_sweep_points);
-    
     parseString(test_sweep_points);
   }
   
@@ -436,8 +443,8 @@ void draw()
       // loop through the arraylist backwards... 
       ps.setParticleFade(particleFade);
       ps.updateParticleFade(0);
+      ps.updateParticleVelocity(0);
     }
-    
   }
 
   if (arraylist_or_array == true) {
@@ -466,15 +473,25 @@ void draw()
   }
   server.sendScreen();
 
-  if ((millis() - lastUpdate) > updateInterval) {
+  //if ((millis() - lastUpdate) > updateInterval) {
+  if ((currentMillis - lastUpdate) > updateInterval) {
+    
     lastUpdate = millis();
     int s = second();
     int m = minute();
     int h = hour();
+    
     String tmp_time_stamp = d + "_" + m + "_" + y + "__" + h + "_" + m + "_" + s;
     String filename = "./../data/habitual_instinct_" + tmp_time_stamp + ".png";
     saveFrame(filename);
   }
+}
+
+void turnOnPSFadeWhenReceiveNewData(){
+  ps.setParticleFade(particleFade);
+  ps.setParticleVelocity(applyVelocity);
+  ps.updateParticleFade(0);
+  ps.updateParticleVelocity(0);
 }
 
 boolean cursorState = true;
@@ -502,6 +519,8 @@ void keyPressed() {
     logDataStream = !logDataStream;
   } else if (key == 'f') {
     particleFade = !particleFade;
+  } else if (key == 'v') {
+    applyVelocity = !applyVelocity;
   }
 }
 

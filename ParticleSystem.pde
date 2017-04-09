@@ -8,6 +8,7 @@ class ParticleSystem{
   int cols;
   int rows;
   boolean particleFade = false;
+  boolean particleVelocity = false;
   boolean psType;
   
   ParticleSystem(PVector location, int msi, int sim){
@@ -19,14 +20,6 @@ class ParticleSystem{
   
   void addParticle(int idx, int angle, int distance){
     int angle_tmp = 0;
-    
-    // Don't need this. it was a bug and didn't display the full 180 data set
-    //if(int(angle) > 90){
-    //  //angle_tmp = angle - 90;
-    //  angle_tmp = angle;
-    //} else {
-    //  angle_tmp = angle;
-    //}
     angle_tmp = angle;
     
     float rad_conversion = radians(angle_tmp);
@@ -37,10 +30,6 @@ class ParticleSystem{
     float b = 180 - angle_tmp - 90;
     float answr = (sin(rad_conversion) * distance) / sin_rad_90;
     float answr_length = (sin(radians(b)) * distance ) / sin_rad_90;
-    
-    //if(int(angle_tmp) > 90){
-    //  answr = answr * -1;
-    //}
     
     //println("origin.z: " + origin.z);
     //println("maxSystemIndex: " + maxSystemIndex);
@@ -121,8 +110,6 @@ class ParticleSystem{
   }
 
   void update_particle(int col, int row, int index, int x, int y){
-    //println(col);
-    //println(row);
     if(col < cols && row < rows){
       int angle_tmp = x;
       int distance = y;
@@ -168,8 +155,12 @@ class ParticleSystem{
   // if particle fade is implemented, it will need to have a way to reset the particle whenever it 
   // has a transparency that is very low
   void setParticleFade(boolean pf){
-    //println("asdfasdfasdfasdf " + str(particleFade));
     particleFade = pf;
+  }
+  
+  void setParticleVelocity(boolean pv){
+    //println("______________VELOCITY:::" + pv);
+    particleVelocity = pv;
   }
    
   void updateParticleFade(int columnIndex){
@@ -204,6 +195,27 @@ class ParticleSystem{
         }
       }
     }
+  }
+  
+  void updateParticleVelocity(int columnIndex){
+    //if(particleVelocity == true){
+      
+      if(psType == true){
+        int i = 0;
+        int psize = particles.size()-1;
+        
+        println("********************");
+        println("particleVelocity"+ particleVelocity);
+        println("********************");
+        println("********************");
+        println("********************");
+        
+        for(i = psize; i>=0; i--){
+          Particle p = particles.get(i);
+          p.setParticleVelocity(particleVelocity);
+        }
+      }
+    //}
   }
   
   void setParticleSystemType(boolean type){

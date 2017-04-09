@@ -5,18 +5,19 @@ class Particle {
   float lifespan;
   boolean transparent;
   boolean particleFade;
+  boolean applyVelocity;
   
   Particle(PVector l){
-    acceleration = new PVector(0,0.05);
+    acceleration = new PVector(0, 0.05);
     // I added this... below... not sure about it tho.
-    // test tomorrow
+    // Not sure what I htink of adding the z velocity in here...
     //velocity = new PVector(random(-1, 1), random(-1, 1), random(-1, 1));
-    
     velocity = new PVector(random(-1, 1), random(-1, 1));
     location = l.get();
     lifespan = 250.0;
     transparent = true;
     particleFade = false;
+    applyVelocity = false;
   }
   
   void run(){
@@ -29,23 +30,24 @@ class Particle {
   }
   
   void update(){
-
-      
-    // TODO: this should be if PF is true and history is false
-    if(particleFade == false){
-      //velocity.add(acceleration);
-      //location.add(velocity);
-    }
     
     if(particleFade == true){
       lifespan -= 1.0;
+      
+      // Plays with velocity to make points more interesting
+      // but only if there is new data coming into the app
+      if(applyVelocity == true){
+        velocity.add(acceleration);
+        location.add(velocity);
+      }
+    } else {
+      // this still drifts away
+      //location.add(velocity);
     }
     
   }
   
   void display(){
-    //println("********** transparent " + transparent);
-    //println("********** particleFade " + particleFade);
     
     if(transparent == false){
       strokeWeight(2);
@@ -69,20 +71,8 @@ class Particle {
     }
     
     pushMatrix();
-    //if(transparent == false){
-    //  if(particleFade == true){
-    //    stroke(255, lifespan);
-    //  } else {
-    //    stroke(255, 255, 255);
-    //  }
-    //} else {
-    //  noStroke();
-    //}
-      // println("location: ");
-      // println(location);
       translate(location.x, location.y, location.z);
       sphere(4);
-      //sphere(map(location.y, 1, 450, 5, 1));
     popMatrix();
   }
 
@@ -110,5 +100,10 @@ class Particle {
   void setParticleFade(boolean pf){
     particleFade = pf;
   }
+  
+  void setParticleVelocity(boolean pv){
+    applyVelocity = pv;
+  }
+  
   
 }

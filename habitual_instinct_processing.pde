@@ -37,18 +37,19 @@ boolean autoCameraZoom = true;
 
 float a = 0.0;
 long lastCamUpdate = 0;
-long updateCamInterval = 10;
+long updateCamInterval = 1;
 
 //int get_history_num = 100;
 int get_history_num = 60;
 int maxSystemIndex = get_history_num;
 int systemIndex = 0;
 int systemIndexMultiplier = 10;
-float camRotateSpeed = 0.5;
+float camRotateSpeed = 0.2;
+//float camRotateSpeed = 1.0;
 Pubnub pubnub;
 
 long lastUpdate = 0;
-long updateInterval = 2000;
+long updateInterval = 15000;
 
 // For saving files
 int d = day();    // Values from 1 - 31
@@ -61,7 +62,7 @@ boolean global_velocity = true;
 boolean applyVelocity = true;
 
 import controlP5.*;
-ControlFrame cf;
+//ControlFrame cf;
 
 String pub;
 String sub;
@@ -77,10 +78,12 @@ long interval = 5000;
 long previousMillis = 0;
 long currentMillis = 0;
 
+float min_cam_dist = 500.0;
+float max_cam_dist = 2000.0;
 
 void settings() {
-  size(800, 600, P3D);
-//  fullScreen(P3D);
+  //size(800, 600, P3D);
+  fullScreen(P3D);
   PJOGL.profile=1;
 
   // Load Keys
@@ -103,13 +106,13 @@ void setup()
   //surface.setLocation(420, 10);
   //========
 
-  frameRate(15);
+  frameRate(30);
   lights();
   sphereDetail(4);
 
   cam = new PeasyCam(this, 1000);
-  cam.setMinimumDistance(500);
-  cam.setMaximumDistance(2000);
+  cam.setMinimumDistance(min_cam_dist);
+  cam.setMaximumDistance(max_cam_dist);
 
   axisLabelFont = createFont( "Arial", 14 );
   axisXHud      = new PVector();
@@ -369,16 +372,12 @@ void draw()
     ps.updateParticleVelocity(0);
   }
  
-  cam.rotateY(radians(camRotateSpeed));
+ cam.rotateY(radians(camRotateSpeed));
 
   if (autoCameraZoom) {
-    if ((currentMillis - lastCamUpdate) > updateCamInterval) {
-      lastCamUpdate = millis();
-      a += 0.005;
-      double d2 = 100 + (sin(a + PI/2) * 1500/2) + 1500/2;
-      cam.setDistance((double)d2);
-      //println("cam.getDistance(): " + cam.getDistance());
-    }
+      a += 0.05;
+      float d2 = 100 + (sin(a + PI/2) * 1500/2) + 1500/2;
+      cam.setDistance((float)d2);
   }
   
   
@@ -453,9 +452,10 @@ void draw()
   }
   server.sendScreen();
 
-  if ((currentMillis - lastUpdate) > updateInterval) {
+  if ((currentMillis - lastUpdate) > (updateInterval * random(0.2, 4.0))) {
     
     lastUpdate = millis();
+    
     int s = second();
     int m = minute();
     int h = hour();
@@ -463,7 +463,22 @@ void draw()
     String tmp_time_stamp = d + "_" + m + "_" + y + "__" + h + "_" + m + "_" + s;
     String filename = "./../data/habitual_instinct_" + tmp_time_stamp + ".png";
     saveFrame(filename);
+    
+    // added this as a new thread to it doesn't skip frames
+    // saving openGL frames in a thread apparently isn't likes
+    //thread("saveFrame");
+    
   }
+}
+
+void saveFrame() {
+  int s = second();
+  int m = minute();
+  int h = hour();
+  
+  String tmp_time_stamp = d + "_" + m + "_" + y + "__" + h + "_" + m + "_" + s;
+  String filename = "./../data/habitual_instinct_" + tmp_time_stamp + ".png";
+  saveFrame(filename);
 }
 
 void turnOnPSFadeWhenReceiveNewData(){

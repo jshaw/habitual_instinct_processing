@@ -32,7 +32,7 @@ class Particle {
   void update(){
     
     if(particleFade == true){
-      lifespan -= 1.0;
+      lifespan -= 0.5;
       
       // Plays with velocity to make points more interesting
       // but only if there is new data coming into the app

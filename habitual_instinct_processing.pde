@@ -7,12 +7,7 @@ import peasy.*;
 //boolean audio = false;
 
 boolean load_history = false;
-
-// ## TODO
-// IF NO DATA COMES IN AFTER 15 SECONDS
-// TURN OFF FADING!
-// NO MATTER WHAT, TURN OFF FADING
-// TODO
+boolean cursorState = true;
 
 // this works with running random test data
 // not pulling from the pubnub stream
@@ -193,7 +188,7 @@ void setup()
         for (i = 0; i < history_array_length; i++) {
           // print out the raw data straight from the pubnub
           // and see what it might be
-          println(split_array[i]);
+          //println(split_array[i]);
           parseString(split_array[i].toString());
         }
       }
@@ -255,11 +250,6 @@ void parseString(String str)
   int panel_id;
   if (str.indexOf("_") > 0) {
     String[] panel_split = split(str, '_');
-
-    //print("||");
-    //print(panel_split[0]);
-    //println("||");
-
     String tmp_panel_id = panel_split[0].replace("\"", "");
     panel_id = Integer.parseInt(tmp_panel_id);
 
@@ -308,7 +298,6 @@ void parseString(String str)
     // only bring values greater then 0
     if (int(reading[2]) > 0) {
       TableRow row = table.getRow(int(reading[0]));
-      //println(row.getFloat("x"));
       int x_tmp = (int)row.getFloat("x");
       int y_tmp = (int)row.getFloat("y");
 
@@ -346,7 +335,7 @@ void parseString(String str)
 void draw()
 {
   background(0);
-  toggleCursor();
+  //toggleCursor();
 
   currentMillis = millis();
 
@@ -356,7 +345,7 @@ void draw()
     // stopp the particle fade feature so the screen doesn't go blank
     
       if (particleFade == true){
-        println("kill particle fade!");
+        //println("kill particle fade!");
         particleFade = false;
         if(applyVelocity == true){
           applyVelocity = false; 
@@ -376,18 +365,13 @@ void draw()
       turnOnPSFadeWhenReceiveNewData();
     }
     
-    //if(applyVelocity != last_velocity_value){
-      //println("HERE IS SOME LOGIC CHECKS TO ONLY RUN ONCE");
-      //last_velocity_value = applyVelocity;
-      ps.setParticleVelocity(applyVelocity);
-      ps.updateParticleVelocity(0);
-    //}
+    ps.setParticleVelocity(applyVelocity);
+    ps.updateParticleVelocity(0);
   }
  
   cam.rotateY(radians(camRotateSpeed));
 
   if (autoCameraZoom) {
-    //if ((millis() - lastCamUpdate) > updateCamInterval) {
     if ((currentMillis - lastCamUpdate) > updateCamInterval) {
       lastCamUpdate = millis();
       a += 0.005;
@@ -469,7 +453,6 @@ void draw()
   }
   server.sendScreen();
 
-  //if ((millis() - lastUpdate) > updateInterval) {
   if ((currentMillis - lastUpdate) > updateInterval) {
     
     lastUpdate = millis();
@@ -490,17 +473,13 @@ void turnOnPSFadeWhenReceiveNewData(){
   ps.updateParticleVelocity(0);
 }
 
-boolean cursorState = true;
-
 void toggleCursor() {
-  if (mousePressed == true) {
     cursorState = !cursorState;
-    //if(cursorState){
-    //  cursor(HAND);
-    //} else {
-    //  noCursor();
-    //}
-  }
+    if(cursorState){
+      cursor();
+    } else {
+      noCursor();
+    }
 }
 
 void keyPressed() {
@@ -519,6 +498,8 @@ void keyPressed() {
     applyVelocity = !applyVelocity;
   } else if (key == 'g') {
     global_velocity = !global_velocity;
+  } else if (key == 'c') {
+    toggleCursor();
   }
 }
 

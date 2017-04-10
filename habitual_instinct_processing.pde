@@ -61,6 +61,8 @@ int m = month();  // Values from 1 - 12
 int y = year();   // 2003, 2004, 2005, etc.
 
 boolean particleFade = true;
+
+boolean global_velocity = true;
 boolean applyVelocity = true;
 
 import controlP5.*;
@@ -305,24 +307,16 @@ void parseString(String str)
 
     // only bring values greater then 0
     if (int(reading[2]) > 0) {
-      //println(int(reading[0]));
-      //println("----------");
       TableRow row = table.getRow(int(reading[0]));
       //println(row.getFloat("x"));
       int x_tmp = (int)row.getFloat("x");
       int y_tmp = (int)row.getFloat("y");
-      int z_tmp = (int)row.getFloat("z");
 
-      //println(">>>>>>>>>>>>>>>>>>>>>");
       int panel_pos = x_tmp * systemIndexMultiplier + ((panel_id) * (48 * systemIndexMultiplier));
-      ps.origin.set(0, 0, panel_pos);
-      
-      //println(x_tmp);
-      //println(panel_id);
-      //println(panel_pos);
-      //println(panel_pos * systemIndexMultiplier);
-      //println("<<<<<<<<<<<<<<<<<<<<<");
-      
+      int y_pos = y_tmp * systemIndexMultiplier;
+      println(y_pos);
+      ps.origin.set(0, y_pos, panel_pos);
+     
       int point_position = panel_pos * systemIndexMultiplier;
 
       if (arraylist_or_array == true) {
@@ -349,8 +343,6 @@ void parseString(String str)
   } 
 }
 
-boolean last_velocity_value;
-
 void draw()
 {
   background(0);
@@ -374,9 +366,13 @@ void draw()
   } else {
     if(particleFade == false){
       particleFade = true;
-      //if(applyVelocity == false){
-      //  applyVelocity = true;
-      //}
+      if(global_velocity == true){
+        if(applyVelocity == false){
+          applyVelocity = true;
+        }
+      } else {
+        applyVelocity = false;
+      }
       turnOnPSFadeWhenReceiveNewData();
     }
     
@@ -521,6 +517,8 @@ void keyPressed() {
     particleFade = !particleFade;
   } else if (key == 'v') {
     applyVelocity = !applyVelocity;
+  } else if (key == 'g') {
+    global_velocity = !global_velocity;
   }
 }
 

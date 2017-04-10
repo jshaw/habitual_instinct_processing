@@ -204,11 +204,7 @@ class ParticleSystem{
         int i = 0;
         int psize = particles.size()-1;
         
-        println("********************");
-        println("particleVelocity"+ particleVelocity);
-        println("********************");
-        println("********************");
-        println("********************");
+        println("particleVelocity: "+ particleVelocity);
         
         for(i = psize; i>=0; i--){
           Particle p = particles.get(i);

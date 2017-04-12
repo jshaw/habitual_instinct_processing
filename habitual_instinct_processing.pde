@@ -4,10 +4,19 @@ import com.pubnub.api.*;
 import processing.serial.*;
 import peasy.*;
 
+import controlP5.*;
+ControlFrame cf;
+
 //boolean audio = false;
 
-boolean load_history = false;
+boolean load_history = true;
 boolean cursorState = true;
+boolean saveFrame = false;
+boolean showOriginBox = false;
+boolean autoCameraZoom = true;
+boolean particleFade = true;
+boolean global_velocity = true;
+boolean applyVelocity = true;
 
 // this works with running random test data
 // not pulling from the pubnub stream
@@ -32,9 +41,6 @@ PVector  axisYHud;
 PVector  axisZHud;
 PVector  axisOrgHud;
 
-boolean showOriginBox = true;
-boolean autoCameraZoom = true;
-
 float a = 0.0;
 long lastCamUpdate = 0;
 long updateCamInterval = 1;
@@ -56,14 +62,6 @@ int d = day();    // Values from 1 - 31
 int m = month();  // Values from 1 - 12
 int y = year();   // 2003, 2004, 2005, etc.
 
-boolean particleFade = true;
-
-boolean global_velocity = true;
-boolean applyVelocity = true;
-
-import controlP5.*;
-//ControlFrame cf;
-
 String pub;
 String sub;
 
@@ -82,8 +80,8 @@ float min_cam_dist = 500.0;
 float max_cam_dist = 2000.0;
 
 void settings() {
-  //size(800, 600, P3D);
-  fullScreen(P3D);
+  size(800, 600, P3D);
+  //fullScreen(P3D);
   PJOGL.profile=1;
 
   // Load Keys
@@ -94,6 +92,10 @@ void settings() {
 
   // create sensor pos table
   createSensorLocationtable();
+  
+  cf = new ControlFrame(this, 400, 800, "Controls");
+  //surface.setLocation(420, 10);
+  
 }
 
 void setup()
@@ -103,7 +105,7 @@ void setup()
   // removing for now
   //========
   //cf = new ControlFrame(this, 400, 800, "Controls");
-  //surface.setLocation(420, 10);
+  surface.setLocation(420, 10);
   //========
 
   frameRate(30);
@@ -452,6 +454,8 @@ void draw()
   }
   server.sendScreen();
 
+  if(saveFrame == true){
+
   if ((currentMillis - lastUpdate) > (updateInterval * random(0.2, 4.0))) {
     
     lastUpdate = millis();
@@ -467,6 +471,8 @@ void draw()
     // added this as a new thread to it doesn't skip frames
     // saving openGL frames in a thread apparently isn't likes
     //thread("saveFrame");
+    
+    }
     
   }
 }

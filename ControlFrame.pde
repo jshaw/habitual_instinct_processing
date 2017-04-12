@@ -23,53 +23,129 @@ class ControlFrame extends PApplet {
     surface.setLocation(10, 10);
     cp5 = new ControlP5(this);
     
-    cp5.addToggle("auto")
-       .plugTo(parent, "auto")
-       .setPosition(10, 70)
+    cp5.addToggle("cursorState")
+       .plugTo(parent, "cursorState")
+       .setPosition(10, 50)
        .setSize(50, 50)
        .setValue(true);
-       
-    cp5.addKnob("blend")
-       .plugTo(parent, "c3")
-       .setPosition(100, 300)
-       .setSize(200, 200)
-       .setRange(0, 255)
-       .setValue(200);
 
-      cp5.addSlider("camRotateSpeed")
-       .plugTo(parent, "camRotateSpeed")
-       .setRange(0, 2.0)
-       .setValue(0.5)
-       .setPosition(100, 140)
-       .setSize(200, 30);
+    cp5.addToggle("saveFrame")
+       .plugTo(parent, "saveFrame")
+       .setPosition(70, 50)
+       .setSize(50, 50)
+       .setValue(false);
 
-    cp5.addSlider("showOriginBox")
-       .plugTo(parent, "showOriginBox")
-       .setRange(0, 2.0)
-       .setValue(0.5)
-       .setPosition(100, 140)
-       .setSize(200, 30);
+    cp5.addToggle("showOriginBox")
+      .plugTo(parent, "showOriginBox")
+      .setPosition(130, 50)
+      .setSize(50, 50)
+      .setValue(true);
 
-    cp5.addSlider("autoCameraZoom")
+    cp5.addToggle("run_test_data")
+       .plugTo(parent, "run_test_data")
+       .setPosition(190, 50)
+       .setSize(50, 50)
+       .setValue(false);
+
+    cp5.addToggle("autoCameraZoom")
        .plugTo(parent, "autoCameraZoom")
-       .setRange(0, 2.0)
-       .setValue(0.5)
-       .setPosition(100, 140)
-       .setSize(200, 30);
+       .setPosition(250, 50)
+       .setSize(50, 50)
+       .setValue(true);
 
-    cp5.addSlider("logDataStream")
+    cp5.addToggle("logDataStream")
        .plugTo(parent, "logDataStream")
-       .setRange(0, 2.0)
-       .setValue(0.5)
-       .setPosition(100, 140)
-       .setSize(200, 30);
+       .setPosition(10, 120)
+       .setSize(50, 50)
+       .setValue(true);
 
-    cp5.addSlider("particleFade")
+    cp5.addToggle("arraylist_or_array")
+       .plugTo(parent, "arraylist_or_array")
+       .setPosition(70, 120)
+       .setSize(50, 50)
+       .setValue(true);
+
+    cp5.addToggle("particleFade")
        .plugTo(parent, "particleFade")
-       .setRange(0, 2.0)
-       .setValue(0.5)
-       .setPosition(100, 140)
-       .setSize(200, 30);
+       .setPosition(130, 120)
+       .setSize(50, 50)
+       .setValue(true);
+
+    cp5.addToggle("global_velocity")
+       .plugTo(parent, "global_velocity")
+       .setPosition(190, 120)
+       .setSize(50, 50)
+       .setValue(true);
+
+    cp5.addToggle("applyVelocity")
+       .plugTo(parent, "applyVelocity")
+       .setPosition(250, 120)
+       .setSize(50, 50)
+       .setValue(true);
+
+
+    // =================================
+    // =================================
+    // =================================
+    // =================================
+    // =================================
+
+
+
+
+    // cp5.addToggle("autoCameraZoom")
+    //    .plugTo(parent, "autoCameraZoom")
+    //    .setPosition(10, 70)
+    //    .setSize(50, 50)
+    //    .setValue(true);
+
+    // cp5.addToggle("autoCameraZoom")
+    //    .plugTo(parent, "autoCameraZoom")
+    //    .setPosition(10, 70)
+    //    .setSize(50, 50)
+    //    .setValue(true);
+       
+    // cp5.addKnob("blend")
+    //    .plugTo(parent, "c3")
+    //    .setPosition(100, 300)
+    //    .setSize(200, 200)
+    //    .setRange(0, 255)
+    //    .setValue(200);
+
+    //   cp5.addSlider("camRotateSpeed")
+    //    .plugTo(parent, "camRotateSpeed")
+    //    .setRange(0, 2.0)
+    //    .setValue(0.5)
+    //    .setPosition(100, 140)
+    //    .setSize(200, 30);
+
+    // cp5.addSlider("showOriginBox")
+    //    .plugTo(parent, "showOriginBox")
+    //    .setRange(0, 2.0)
+    //    .setValue(0.5)
+    //    .setPosition(100, 140)
+    //    .setSize(200, 30);
+
+    // cp5.addSlider("autoCameraZoom")
+    //    .plugTo(parent, "autoCameraZoom")
+    //    .setRange(0, 2.0)
+    //    .setValue(0.5)
+    //    .setPosition(100, 140)
+    //    .setSize(200, 30);
+
+    // cp5.addSlider("logDataStream")
+    //    .plugTo(parent, "logDataStream")
+    //    .setRange(0, 2.0)
+    //    .setValue(0.5)
+    //    .setPosition(100, 140)
+    //    .setSize(200, 30);
+
+    // cp5.addSlider("particleFade")
+    //    .plugTo(parent, "particleFade")
+    //    .setRange(0, 2.0)
+    //    .setValue(0.5)
+    //    .setPosition(100, 140)
+    //    .setSize(200, 30);
        
     // cp5.addNumberbox("camRotateSpeed")
     //    .plugTo(parent, "camRotateSpeed")

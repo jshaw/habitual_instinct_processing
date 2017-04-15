@@ -48,9 +48,6 @@ class Particle {
   }
   
   void display(){
-
-
-    println("bg_g: " + bg_g);
     
     if(transparent == false){
       strokeWeight(2);

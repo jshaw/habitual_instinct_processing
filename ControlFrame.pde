@@ -25,63 +25,176 @@ class ControlFrame extends PApplet {
     
     cp5.addToggle("cursorState")
        .plugTo(parent, "cursorState")
-       .setPosition(10, 50)
+       .setPosition(20, 20)
        .setSize(50, 50)
        .setValue(true);
 
     cp5.addToggle("saveFrame")
        .plugTo(parent, "saveFrame")
-       .setPosition(70, 50)
+       .setPosition(90, 20)
        .setSize(50, 50)
        .setValue(false);
 
     cp5.addToggle("showOriginBox")
       .plugTo(parent, "showOriginBox")
-      .setPosition(130, 50)
+      .setPosition(160, 20)
       .setSize(50, 50)
       .setValue(true);
 
     cp5.addToggle("run_test_data")
        .plugTo(parent, "run_test_data")
-       .setPosition(190, 50)
+       .setPosition(230, 20)
        .setSize(50, 50)
        .setValue(false);
 
     cp5.addToggle("autoCameraZoom")
        .plugTo(parent, "autoCameraZoom")
-       .setPosition(250, 50)
+       .setPosition(300, 20)
        .setSize(50, 50)
        .setValue(true);
 
     cp5.addToggle("logDataStream")
        .plugTo(parent, "logDataStream")
-       .setPosition(10, 120)
+       .setPosition(20, 90)
        .setSize(50, 50)
-       .setValue(true);
+       .setValue(false);
 
     cp5.addToggle("arraylist_or_array")
        .plugTo(parent, "arraylist_or_array")
-       .setPosition(70, 120)
+       .setPosition(90, 90)
        .setSize(50, 50)
        .setValue(true);
 
     cp5.addToggle("particleFade")
        .plugTo(parent, "particleFade")
-       .setPosition(130, 120)
+       .setPosition(160, 90)
        .setSize(50, 50)
        .setValue(true);
 
     cp5.addToggle("global_velocity")
        .plugTo(parent, "global_velocity")
-       .setPosition(190, 120)
+       .setPosition(230, 90)
        .setSize(50, 50)
        .setValue(true);
 
     cp5.addToggle("applyVelocity")
        .plugTo(parent, "applyVelocity")
-       .setPosition(250, 120)
+       .setPosition(300, 90)
        .setSize(50, 50)
        .setValue(true);
+       
+    cp5.addSlider("camRotateSpeed")
+        .plugTo(parent, "camRotateSpeed")
+        .setPosition(20, 160)
+        .setRange(0, 3.0)
+        .setValue(0.5)
+        .setSize(30, 50);
+        
+    cp5.addSlider("min_cam_dist")
+       .plugTo(parent, "min_cam_dist")
+       .setPosition(90, 160)
+       .setRange(100.0, 1000.0)
+       .setValue(500.0)
+       .setSize(30, 50);
+
+    cp5.addSlider("max_cam_dist")
+       .plugTo(parent, "max_cam_dist")
+       .setPosition(160, 160)
+       .setRange(1000.0, 3000.0)
+       .setValue(2000.0)
+       .setSize(30, 50);
+
+    // ===================
+    
+    cp5.addSlider("bg_r")
+       .plugTo(parent, "bg_r")
+       .setPosition(20, 240)
+       .setRange(0.0, 255.0)
+       .setValue(0.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("bg_g")
+       .plugTo(parent, "bg_g")
+       .setPosition(20, 270)
+       .setRange(0.0, 255.0)
+       .setValue(0.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("bg_b")
+       .plugTo(parent, "bg_b")
+       .setPosition(20, 300)
+       .setRange(0.0, 255.0)
+       .setValue(0.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("bg_a")
+       .plugTo(parent, "bg_a")
+       .setPosition(20, 330)
+       .setRange(0.0, 255.0)
+       .setValue(255.0)
+       .setSize(100, 20);
+
+    // ======
+
+    cp5.addSlider("fill_r")
+       .plugTo(parent, "fill_r")
+       .setPosition(20, 400)
+       .setRange(0.0, 255.0)
+       .setValue(255.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("fill_g")
+       .plugTo(parent, "fill_g")
+       .setPosition(20, 430)
+       .setRange(0.0, 255.0)
+       .setValue(255.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("fill_b")
+       .plugTo(parent, "fill_b")
+       .setPosition(20, 460)
+       .setRange(0.0, 255.0)
+       .setValue(255.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("fill_a")
+       .plugTo(parent, "fill_a")
+       .setPosition(20, 490)
+       .setRange(0.0, 255.0)
+       .setValue(255.0)
+       .setSize(100, 20);
+
+
+    // =======================
+
+    cp5.addSlider("stroke_r")
+       .plugTo(parent, "stroke_r")
+       .setPosition(20, 550)
+       .setRange(0.0, 255.0)
+       .setValue(200.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("stroke_g")
+       .plugTo(parent, "stroke_g")
+       .setPosition(20, 580)
+       .setRange(0.0, 255.0)
+       .setValue(200.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("stroke_b")
+       .plugTo(parent, "stroke_b")
+       .setPosition(20, 610)
+       .setRange(0.0, 255.0)
+       .setValue(200.0)
+       .setSize(100, 20);
+
+    cp5.addSlider("stroke_a")
+       .plugTo(parent, "stroke_a")
+       .setPosition(20, 640)
+       .setRange(0.0, 255.0)
+       .setValue(200.0)
+       .setSize(100, 20);
+
 
 
     // =================================

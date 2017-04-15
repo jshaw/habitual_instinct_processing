@@ -48,24 +48,28 @@ class Particle {
   }
   
   void display(){
+
+
+    println("bg_g: " + bg_g);
     
     if(transparent == false){
       strokeWeight(2);
       if(particleFade == true){
-        fill(255, lifespan);
-        stroke(255, lifespan);
+        // fill(255, lifespan);
+        fill(fill_r, fill_g, fill_b, lifespan);
+        stroke(stroke_r, stroke_g, stroke_b, lifespan);
       } else {
-        fill(255, 255, 255);
-        stroke(255, 255, 255);
+        fill(fill_r, fill_g, fill_b, fill_a);
+        stroke(stroke_r, stroke_g, stroke_b, stroke_a);
       }
       
     } else {
       if(particleFade == true){
-        fill(255, lifespan);
-        stroke(200, lifespan);
+        fill(fill_r, fill_g, fill_b, lifespan);
+        stroke(stroke_r, stroke_g, stroke_b, lifespan);
       } else {
-        fill(255, 255, 255);
-        stroke(200, 200, 200);
+        fill(fill_r, fill_g, fill_b, fill_a);
+        stroke(stroke_r, stroke_g, stroke_b, stroke_a);
       }
       
     }

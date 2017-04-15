@@ -25,6 +25,21 @@ boolean run_test_data = false;
 boolean logDataStream = false;
 String debug_string = "";
 
+float bg_r = 255.0;
+float bg_g = 255.0;
+float bg_b = 255.0;
+float bg_a = 255.0;
+
+float fill_r = 0.0;
+float fill_g = 0.0;
+float fill_b = 0.0;
+float fill_a = 0.0;
+
+float stroke_r = 0.0;
+float stroke_g = 0.0;
+float stroke_b = 0.0;
+float stroke_a = 0.0;
+
 // true = arraylist
 // false = array
 boolean arraylist_or_array = true;
@@ -308,7 +323,7 @@ void parseString(String str)
 
       int panel_pos = x_tmp * systemIndexMultiplier + ((panel_id) * (48 * systemIndexMultiplier));
       int y_pos = y_tmp * systemIndexMultiplier;
-      println(y_pos);
+      //println(y_pos);
       ps.origin.set(0, y_pos, panel_pos);
      
       int point_position = panel_pos * systemIndexMultiplier;
@@ -339,8 +354,7 @@ void parseString(String str)
 
 void draw()
 {
-  background(0);
-  //toggleCursor();
+  background(bg_r, bg_g, bg_b, bg_a);
 
   currentMillis = millis();
 

@@ -11,7 +11,7 @@ ControlFrame cf;
 
 boolean load_history = true;
 boolean cursorState = true;
-boolean saveFrame = false;
+boolean saveFrameVar = false;
 boolean showOriginBox = false;
 boolean autoCameraZoom = true;
 boolean particleFade = true;
@@ -95,8 +95,8 @@ float min_cam_dist = 500.0;
 float max_cam_dist = 2000.0;
 
 void settings() {
-  size(800, 600, P3D);
-  //fullScreen(P3D);
+  //size(800, 600, P3D);
+  fullScreen(P3D);
   PJOGL.profile=1;
 
   // Load Keys
@@ -468,30 +468,30 @@ void draw()
   }
   server.sendScreen();
 
-  if(saveFrame == true){
+  if(saveFrameVar == true){
 
-  if ((currentMillis - lastUpdate) > (updateInterval * random(0.2, 4.0))) {
+    if ((currentMillis - lastUpdate) > (updateInterval * random(0.2, 4.0))) {
     
-    lastUpdate = millis();
-    
-    int s = second();
-    int m = minute();
-    int h = hour();
-    
-    String tmp_time_stamp = d + "_" + m + "_" + y + "__" + h + "_" + m + "_" + s;
-    String filename = "./../data/habitual_instinct_" + tmp_time_stamp + ".png";
-    saveFrame(filename);
-    
-    // added this as a new thread to it doesn't skip frames
-    // saving openGL frames in a thread apparently isn't likes
-    //thread("saveFrame");
+      lastUpdate = millis();
+      
+      int s = second();
+      int m = minute();
+      int h = hour();
+      
+      String tmp_time_stamp = d + "_" + m + "_" + y + "__" + h + "_" + m + "_" + s;
+      String filename = "./../data/habitual_instinct_" + tmp_time_stamp + ".png";
+      saveFrame(filename);
+      
+      // added this as a new thread to it doesn't skip frames
+      // saving openGL frames in a thread apparently isn't likes
+      //thread("saveImageFrame");
     
     }
     
   }
 }
 
-void saveFrame() {
+void saveImageFrame() {
   int s = second();
   int m = minute();
   int h = hour();

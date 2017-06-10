@@ -29,8 +29,8 @@ class ControlFrame extends PApplet {
        .setSize(50, 50)
        .setValue(true);
 
-    cp5.addToggle("saveFrame")
-       .plugTo(parent, "saveFrame")
+    cp5.addToggle("saveFrameVar")
+       .plugTo(parent, "saveFrameVar")
        .setPosition(90, 20)
        .setSize(50, 50)
        .setValue(false);
